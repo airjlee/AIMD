@@ -1,18 +1,31 @@
 package com.example.server.service;
 
-import com.example.server.dto.GeminiRequest;
-import com.example.server.dto.GeminiResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 @Service
 public class GeminiService {
-    private final String PYTHON_SERVICE_URL = "http://localhost:8080/plan";  // Adjust port if needed
-    private final RestTemplate restTemplate = new RestTemplate();
-
     public String generateContent(String prompt) {
-        GeminiRequest request = new GeminiRequest(prompt);
-        GeminiResponse response = restTemplate.postForObject(PYTHON_SERVICE_URL, request, GeminiResponse.class);
-        return response.getGeneratedText();
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "AIMD/RAG/main.py", prompt);
+            Process process = processBuilder.start();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            StringBuilder output = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                output.append(line).append("\n");
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode != 0) {
+                throw new RuntimeException("Python script exited with code " + exitCode);
+            }
+
+            return output.toString().trim();
+        } catch (Exception e) {
+            throw new RuntimeException("Error executing Python script", e);
+        }
     }
 }

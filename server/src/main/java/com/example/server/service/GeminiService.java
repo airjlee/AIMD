@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 public class GeminiService {
     public String generateContent(String prompt) {
         try {
-            ProcessBuilder processBuilder = new ProcessBuilder("python", "AIMD/RAG/main.py", prompt);
+            ProcessBuilder processBuilder = new ProcessBuilder("python", "../../../../../../AIMD/RAG/main.py", prompt);
             Process process = processBuilder.start();
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));

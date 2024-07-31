@@ -24,8 +24,7 @@ model = genai.GenerativeModel(
   # See https://ai.google.dev/gemini-api/docs/safety-settings
 )
 
-response = model.generate_content([
-  "what are you"
-])
 
-print(response.text)
+def generate_content(prompt):
+  response = model.generate_content(prompt)
+  return response.text

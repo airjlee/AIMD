@@ -7,25 +7,24 @@ function PlaygroundArea() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("yo");
     try {
-      const response = await fetch("http://localhost:8080/api/plan", {
+      const response = await fetch("http://localhost:8000/api/generate/", {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({prompt})
-      })
+        body: JSON.stringify({ prompt })
+      });
 
       if (!response.ok) {
-        throw new Error("not ok");
+        throw new Error("Network response was not ok");
       }
 
       const data = await response.json();
-      setResults(prompt);
+      setResults(Array.isArray(data) ? data : [data]);
 
     } catch (error) {
-      console.error("error: ", error);
+      console.error("Error:", error);
     }
   };
 
@@ -42,9 +41,13 @@ function PlaygroundArea() {
         <button type="submit">Run</button>
       </form>
       <div className="results-area">
-        {results.map((result, index) => (
-          <ResultDisplay key={index} data={results} />
-        ))}
+        {results.length > 0 ? (
+          results.map((result, index) => (
+            <ResultDisplay key={index} data={result} />
+          ))
+        ) : (
+          <p>No results yet.</p>
+        )}
       </div>
     </div>
   );

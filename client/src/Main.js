@@ -1,23 +1,19 @@
-import logo from './logo.svg';
+import React from 'react';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import PlaygroundArea from './components/PlaygroundArea';
 import './App.css';
 
-function App() {
-    return (
-        <div className="App">
-            <header className="App-header">
-                <p>
-                    Affordhealth
-                </p>
-                <form>
-                    <label>
- 
-                        <input type="text" name="name" />
-                    </label>
-                    <input type="submit" value="Submit" />
-                </form>
-            </header>
-        </div>
-    );
+const Main = () => {
+  return (
+    <div className="app">
+      <Sidebar />
+      <main className="main-content">
+        <Header />
+        <PlaygroundArea />
+      </main>
+    </div>
+  );
 }
 
-export default App;
+export default Main;
